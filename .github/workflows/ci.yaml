@@ -5,13 +5,11 @@ on:
     branches:
       - main
     tags:
-      - 'v*.*.*_**'
-
+      - 'v*.*.*-*-*'
 env:
   TARGETOS: linux
   TARGETARCH: amd64
   RUNNER_VERSION: 2.323.0
-  REG_TOKEN: ${{ secrets.REG_TOKEN }}
   PROJECT_NAME: ${{ github.event.repository.name }}
   TAG_NAME: ${{ github.ref_name }}
   IMAGE: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ github.ref_name }}
@@ -25,16 +23,16 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build build \
+          docker build . \
             --build-arg RUNNER_VERSION=${RUNNER_VERSION} \
             --build-arg TARGETOS=${TARGETOS} \
             --build-arg TARGETARCH=${TARGETARCH} \
-            -t $IMAGE .
+            -t $IMAGE
 
       - name: Log in to GitHub Container Registry
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          echo "${{ secrets.GIT_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Push Docker Image
         if: startsWith(github.ref, 'refs/tags/')
@@ -43,7 +41,7 @@ jobs:
       - name: Deploy Docker Stack
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          sed -i "s/__IMAGE__/$IMAGE/" ./docker-compose.yml
-          sed -i "s/__REG_TOKEN__/$IMAGE/" ./docker-compose.yml
+          sed -i "s|__IMAGE__|$IMAGE|" ./docker-compose.yml
+          sed -i "s|__REG_TOKEN__|${{ secrets.REG_TOKEN }}|" ./docker-compose.yml
           mv ./docker-compose.yml /stacks/github/$PROJECT_NAME.yml
           docker stack deploy --compose-file /stacks/github/$PROJECT_NAME.yml $PROJECT_NAME >> /dev/null
