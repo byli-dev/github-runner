@@ -63,9 +63,9 @@ WORKDIR /home/config
 COPY --chown=runner:docker --from=build /actions-runner .
 COPY --from=build /usr/local/lib/docker/cli-plugins/docker-buildx /usr/local/lib/docker/cli-plugins/docker-buildx
 RUN install -o root -g root -m 755 docker/* /usr/bin/ && rm -rf docker
-COPY entrypoint.sh /home/start.sh
+COPY entrypoint.sh /home/entrypoint.sh
 RUN chmod +x /home/entrypoint.sh
 
 USER runner
 
-ENTRYPOINT ["/bin/bash", "/home/start.sh"]
+ENTRYPOINT ["/bin/bash", "/home/entrypoint.sh"]

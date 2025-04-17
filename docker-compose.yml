@@ -4,12 +4,9 @@ services:
     container_name: github-runner
     restart: always
     volumes:
-      # This binding prevents the need to rebind credentials after a restart
-      - ../volumes/github-runner:/home/runner
-      # This binding allows the runner to access the Docker socket
+      - ../github:/stacks/github
+      - ../../volumes/github-runner:/home/runner
       - /var/run/docker.sock:/var/run/docker.sock
-      # Custom binding
-      - ./github:/stacks/github
     environment:
       REG_TOKEN: "__REG_TOKEN__"
       NAME: "github-alpine-byli-1"
