@@ -1,6 +1,8 @@
 # Github-Runner image for Docker
 
 <!-- badges -->
+![](https://img.shields.io/badge/version-2.323.0-brightgreen)
+
 <!-- badges-end -->
 
 This image provides an alternative solution with the official Github-Runner image when running on Docker. The official image does not persist the credentials after a restart, which can be problematic for long-running jobs.
