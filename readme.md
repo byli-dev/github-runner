@@ -1,5 +1,8 @@
 # Github-Runner image for Docker
 
+<!-- badges -->
+<!-- badges-end -->
+
 This image provides an alternative solution with the official Github-Runner image when running on Docker. The official image does not persist the credentials after a restart, which can be problematic for long-running jobs.
 ## Usage
 
@@ -19,5 +22,6 @@ services:
       NAME: "github-alpine-byli-1"
       WORKDIR: "/home/runner/projects"
       ORGANIZATION: "byli-dev"
+
 
 
