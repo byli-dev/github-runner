@@ -11,7 +11,8 @@ This image provides an alternative solution with the official Github-Runner imag
 ```yaml
 services:
   github-runner:
-    image: github-runner:latest
+    image: ghcr.io/byli-dev/github-runner:2.323.0-linux-amd64
+    # OR ghcr.io/byli-dev/github-runner:2.323.0-linux-arm64
     container_name: github-runner
     restart: always
     volumes:
